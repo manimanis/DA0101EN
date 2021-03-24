@@ -1,0 +1,53 @@
+body {
+  counter-reset: figure_counter;
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  border: 1px solid #888;
+}
+
+figure {
+  text-align: center;
+}
+
+figure img {
+  max-width: 100%;
+}
+
+figure figcaption {
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+figure figcaption::before {
+  counter-increment: figure_counter;
+  content: "Figure " counter(figure_counter) ", ";
+}
+
+#columns-names td:nth-child(3n+1) {
+  width: 5%;
+}
+
+#columns-names td:nth-child(3n+2) {
+  width: 10%;
+}
+
+#columns-names td:nth-child(3n + 3) {
+  width: 35%;
+}
+
+main h1 {
+  color: #df1111;
+  text-align: center;
+}
+
+main h2 {
+  text-align: center;
+  color: #001257;
+}
+
+main h3 {
+  color: #012c00;
+}

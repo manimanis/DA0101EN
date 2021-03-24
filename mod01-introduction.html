@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 - Introduction</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <main class="container my-4">
+    <h1>Data Analysis with Python</h1>
+    <h2>Module 1 - Introduction</h2>
+
+    <section>
+      <h3>Syllabus</h3>
+
+      <ul>
+        <li>Learning Objectives</li>
+        <li>Understanding the Domain</li>
+        <li>Understanding the Dataset</li>
+        <li>Python package for data science</li>
+        <li>Importing and Exporting Data in Python</li>
+        <li>Basic Insights from Datasets</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Learning Objectives</h3>
+
+      <p>In this module, you'll learn about an example around estimating used car prices, using
+        Python. Then we will introduce an overview of Python packages used for data analysis. And
+        finally, you will learn about how to import and export data in and from
+        Python, and how to obtain basic insights from the dataset on used cars and their prices.</p>
+      <p>We'll be answering the following question:</p>
+      <p class="text-center">"Can we estimate the price of a used car based on its characteristics?"
+      </p>
+
+      <p>To answer this question, we are going to use various Python packages to perform data
+        cleaning, exploratory data analysis, model development and model evaluation.</p>
+    </section>
+
+    <section>
+      <h3>The Problem</h3>
+
+      <p>Before we begin talking about the problem (used car prices), we should first understand the
+        importance of data analysis.</p>
+      <p>Data is collected everywhere around us, manually by scientists, or collected digitally
+        every time we click on a website or on mobile device. But data does not mean information.
+      </p>
+      <p>Data analysis, and in essence, data science, helps us unlock the information and insights
+        from raw data, to answer our questions.</p>
+      <p>So data analysis plays an important role by helping us to discover useful information
+        from the data, answer questions, and even predict the future or the unknown.</p>
+      <p>In this problem we have a friend named Tom. And Tom wants to sell his car. But he doesn't
+        know how much he should sell his car for.</p>
+      <p>Tom wants to sell his car for as much as he can. But he also wants to set the price
+        reasonably so someone would want to purchase it.</p>
+      <p>Let's think like data scientists and clearly define the problems:</p>
+      <p>For example, is there data on the prices of other cars and their characteristics?</p>
+      <p>What features of cars affect their prices? Colour? Brand? Does horsepower also affect
+        the selling price, or perhaps, something else?</p>
+      <p>To answer these questions, we're going to need some data.</p>
+      <p>In the next sections, we'll:</p>
+      <ul>
+        <li>First, to understand the data.</li>
+        <li>Than, import it into Python.</li>
+        <li>Finally, having some basic insights from the data.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Understanding the Dataset</h3>
+
+      <p>The dataset used in this course is an open dataset, by Jeffrey C. Schlimmer.</p>
+      <p>It can be downloaded from <a href="https://archive.ics.uci.edu/ml/datasets/Automobile"
+           target="_blank"
+           rel="noopener noreferrer">https://archive.ics.uci.edu/ml/datasets/Automobile</a></p>
+
+      <p>This dataset is in CSV format, which separates each of the values with commas.</p>
+      <p>Each line represents a row in the dataset.</p>
+      <p>The above link gives the meaning of each column of the 26 columns in the dataset.</p>
+
+      <table id="columns-names" class="table table-bordered table-sm">
+        <tr>
+          <th>N°</th>
+          <th>Name</th>
+          <th>Range</th>
+          <th>N°</th>
+          <th>Name</th>
+          <th>Range</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>symboling</td>
+          <td>-3, -2, -1, 0, 1, 2, 3</td>
+          <td>2</td>
+          <td>normalized-losses</td>
+          <td>continuous from 65 to 256</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>make</td>
+          <td>alfa-romero, audi, bmw, chevrolet, dodge, honda,
+            isuzu, jaguar, mazda, mercedes-benz, mercury,
+            mitsubishi, nissan, peugot, plymouth, porsche,
+            renault, saab, subaru, toyota, volkswagen, volvo</td>
+          <td>4</td>
+          <td>fuel-type</td>
+          <td>diesel, gas</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>aspiration</td>
+          <td>std, turbo</td>
+          <td>6</td>
+          <td>num-of-doors</td>
+          <td>four, two</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>body-style</td>
+          <td>hardtop, wagon, sedan, hatchback, convertible.</td>
+          <td>8</td>
+          <td>drive-wheels</td>
+          <td>4wd, fwd, rwd</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>engine-location</td>
+          <td>front, rear</td>
+          <td>10</td>
+          <td>wheel-base</td>
+          <td>continuous from 86.6 120.9</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>length</td>
+          <td>continuous from 141.1 to 208.1</td>
+          <td>12</td>
+          <td>width</td>
+          <td>continuous from 60.3 to 72.3</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>height</td>
+          <td>continuous from 47.8 to 59.8</td>
+          <td>14</td>
+          <td>curb-weight</td>
+          <td>continuous from 1488 to 4066</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>engine-type</td>
+          <td>dohc, dohcv, l, ohc, ohcf, ohcv, rotor</td>
+          <td>16</td>
+          <td>num-of-cylinders</td>
+          <td>eight, five, four, six, three, twelve, two</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>engine-size</td>
+          <td>continuous from 61 to 326</td>
+          <td>18</td>
+          <td>fuel-system</td>
+          <td>1bbl, 2bbl, 4bbl, idi, mfi, mpfi, spdi, spfi</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td>bore</td>
+          <td>continuous from 2.54 to 3.94</td>
+          <td>20</td>
+          <td>stroke</td>
+          <td>continuous from 2.07 to 4.17</td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td>compression-ratio</td>
+          <td>continuous from 7 to 23</td>
+          <td>22</td>
+          <td>horsepower</td>
+          <td>continuous from 48 to 288</td>
+        </tr>
+        <tr>
+          <td>23</td>
+          <td>peak-rpm</td>
+          <td>continuous from 4150 to 6600</td>
+          <td>24</td>
+          <td>city-mpg</td>
+          <td>continuous from 13 to 49</td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td>highway-mpg</td>
+          <td>continuous from 16 to 54</td>
+          <td>26</td>
+          <td>price</td>
+          <td>continuous from 5118 to 45400</td>
+        </tr>
+      </table>
+      <p>There are a lot of columns, and we will just go through a few of them.</p>
+      <p>The first attribute, "symboling", corresponds to the insurance risk level of a car.
+        Cars are assigned a risk factor symbol associated with their price.
+        A value of +3 indicates that the auto is risky, -3 that it is probably pretty safe.</p>
+      <p>The second attribute "normalized-losses" is the relative average loss payment per insured
+        vehicle year.
+        This value range from 65 to 256, and is normalized for all autos within a particular size
+        classification (two-door small, station wagons, sports/speciality, etc...), and represents
+        the average loss per car per year.</p>
+      <p>The other attributes are easy to understand.</p>
+
+      <p>the 26th attribute is "price". This is our <b>target value</b>, or <b>label</b>.</p>
+      <p>This means "price" is the value that we want to predict from the dataset, and the
+        predictors should be all the other variables.</p>
+    </section>
+
+    <section>
+      <h3>Python Packages for Data Science</h3>
+
+      <p>We have divided the Python data analysis libraries into three groups:</p>
+
+      <ol>
+        <li>The first group is called <strong>scientific computing libraries</strong>
+          <ul>
+            <li><strong>Pandas</strong> offers data structure and tools for effective data
+              manipulation and analysis.
+              It provides fast access to structured data.
+              The primary instrument of Pandas is a two-dimensional table consisting of column and
+              row
+              labels, which are called a DataFrame.
+              It is designed to provide easy indexing functionality.
+              <figure>
+                <img src="images/img01_320.png" alt="Pandas">
+                <figcaption>Pandas</figcaption>
+              </figure>
+            </li>
+            <li>The <strong>Numpy</strong> library uses arrays for its inputs and outputs.
+              It can be extended to objects for matrices, and with minor coding changes, developers
+              can perform fast array processing.
+              <figure>
+                <img src="images/img02_320.png" alt="NumPy">
+                <figcaption>NumPy</figcaption>
+              </figure>
+            </li>
+            <li><strong>SciPy</strong> includes functions for some advanced math problems, as well
+              as data visualization.
+              <figure>
+                <img src="images/img03_320.png" alt="SciPy">
+                <figcaption>SciPy</figcaption>
+              </figure>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>Using <strong>data visualization</strong> functions is the best way to communicate with
+            others, showing them meaningful results of analysis.</p>
+          <p>These libraries enable you to create graphs, charts and maps.</p>
+          <ul>
+            <li>The <strong>Matplotlib</strong> package is the most well-known library for data
+              visualization.
+              It is great for making graphs and plots. The graphs are also highly customizable.
+              <figure>
+                <img src="images/img04.svg" alt="Matplotlib">
+                <figcaption>Matplotlib</figcaption>
+              </figure>
+            </li>
+            <li>Another high-level visualization library is <strong>Seaborn</strong>.
+              It is based on Matplotlib. It's very easy to generate various plots such as heat maps,
+              time series, and violin plots.
+              <figure>
+                <img src="images/img05_320.png" alt="Seaborn">
+                <figcaption>Seaborn</figcaption>
+              </figure>
+            </li>
+          </ul>
+        </li>
+        <li>The algorithmic libraries tackle some machine learning tasks from basic to complex.
+          Here we introduce two packages:
+          <ul>
+            <li>The <strong>Scikit-learn</strong> library contains tools for
+              statistical modeling, including regression, classification, clustering and so on.
+              This library is built on NumPy, SciPy and Matplotlib.
+              <figure>
+                <img src="images/img06_320.png" alt="Scikit-learn">
+                <figcaption>Scikit-learn</figcaption>
+              </figure>
+            </li>
+            <li><strong>StatsModels</strong> is also a Python module that allows users to explore
+              data, estimate statistical models, and perform statistical tests.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h3>Importing and Exporting Data in Python</h3>
+
+      <p>Data acquisition is a process of loading and reading data into notebook from various
+        sources.</p>
+
+      <p>To read any data using Python’s pandas package, there are two important factors to
+        consider: format and file path.</p>
+
+      <ul>
+        <li>Format is the way data is encoded.
+          We can usually tell different encoding schemes by looking at the ending of the file name.
+          Some common encodings are csv, json, xlsx, hdf and so forth.</li>
+        <li>The file path tells us where the data is stored.</li>
+      </ul>
+
+      <p> Reading data in pandas can be done quickly in three steps :</p>
+
+      <ol>
+        <li>First, import pandas.</li>
+        <li>Then define a variable with the file path.</li>
+        <li>And then use the read_csv method to import the data.</li>
+      </ol>
+
+      <pre><code># Import pandas library
+import pandas as pd
+
+# Read the online file by the URL provides above, and assign it to variable "df"
+file_path = "imports-85.data"
+df = pd.read_csv(file_path, header=None)</code></pre>
+
+      <p>“read_csv” assumes that the data contains a header. Our data on used cars has no column
+        headers, so that is why we assigned None to <code>headers</code>.</p>
+
+      <p>Since printing the entire dataset may take up too much time and resources, to save time,
+        we can just use <code>dataframe.head()</code> to show the first n rows of the data frame.
+      </p>
+
+      <pre><code># show the first 5 rows using dataframe.head() method
+print("The first 5 rows of the dataframe") 
+df.head(5)</code></pre>
+
+      <p>Similarly, <code>dataframe.tail(n)</code> shows the bottom n rows of data frame.</p>
+
+      <pre><code>df.tail()</code></pre>
+
+      <p>It is difficult to work with the dataframe without having meaningful column names, however,
+        we can assign column names in pandas.</p>
+
+      <pre><code># create headers list
+headers = ["symboling","normalized-losses","make","fuel-type","aspiration", "num-of-doors","body-style",
+          "drive-wheels","engine-location","wheel-base", "length","width","height","curb-weight","engine-type",
+          "num-of-cylinders", "engine-size","fuel-system","bore","stroke","compression-ratio","horsepower",
+          "peak-rpm","city-mpg","highway-mpg","price"]
+df.columns = headers
+df.head(10)</code></pre>
+
+      <p>At some point in time after you’ve done operations on your dataframe, you may want
+        to export your pandas dataframe to a new CSV file.
+        You can do this using the method, ”to_csv()"</p>
+
+      <pre><code>df.to_csv("automobile.csv", index=False)</code></pre>
+
+      <p>Pandas can read from and save to others then CSV:</p>
+
+      <table class="table w-75 flex-justify-center">
+        <thead>
+          <tr>
+            <th>Data Format</th>
+            <th>Read</th>
+            <th>Save</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>csv</td>
+            <td><code>pd.read_csv()</code></td>
+            <td><code>df.to_csv()</code></td>
+          </tr>
+          <tr>
+            <td>json</td>
+            <td><code>pd.read_json()</code></td>
+            <td><code>df.to_json()</code></td>
+          </tr>
+          <tr>
+            <td>excel</td>
+            <td><code>pd.read_excel()</code></td>
+            <td><code>df.to_excel()</code></td>
+          </tr>
+          <tr>
+            <td>hdf</td>
+            <td><code>pd.read_hdf()</code></td>
+            <td><code>df.to_hdf()</code></td>
+          </tr>
+          <tr>
+            <td>sql</td>
+            <td><code>pd.read_sql()</code></td>
+            <td><code>df.to_sql()</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h3>Basic Insights from Datasets</h3>
+
+      <p>After importing the data, it's time for us to explore the dataset.</p>
+
+      <p>Panda's has several built in methods that could be used to understand the datatype of
+        features or to look at the distribution of data within the dataset.</p>
+
+      <p>Data has a variety of types.
+        The main types stored in Pandas objects are object, float, int, and datetime.</p>
+
+      <p>Pandas automatically assigns types based on the encoding it detects from the original
+        data table. For a number of reasons, this assignment may be incorrect.</p>
+      <p>In this case, we may need to manually change the datatype to float.</p>
+
+      <p>In order to better learn about each attribute, it is always good for us to know the data
+        type of each column. In Pandas: </p>
+
+      <pre><code>df.dtypes</code></pre>
+
+      <p>Now we would like to check the statistical summary of each column to learn about the
+        distribution of data in each column.</p>
+
+      <p>To get the quick statistics, we use the describe method.
+        It returns the number of terms in the column as "count", average column value as "mean",
+        column standard deviation as "std", the maximum and minimum values, as well as the boundary
+        of each of the quartiles.</p>
+
+      <pre><code>df.describe()</code></pre>
+
+      <p>By default, the dataframe.describe() function skips rows and columns that do not contain
+        numbers. To enable a summary of all the columns, we could add an argument
+        <code>include="all"</code> inside the describe function bracket.
+      </p>
+
+      <pre><code>df.describe(include = "all")</code></pre>
+
+      <p>Now, it provides the statistical summary of all the columns, including object-typed
+        attributes.
+        We can now see how many unique values, which is the top value and the frequency of top value
+        in the object-typed columns.
+        Some values in the table above show as "NaN", this is because those numbers are not
+        available regarding a particular column type.</p>
+
+      <p>You can apply the method to ".describe()" to the columns 'length' and 'compression-ratio'
+        as follows: </p>
+
+      <pre><code>df[['length', 'compression-ratio']].describe()</code></pre>
+
+    </section>
+  </main>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

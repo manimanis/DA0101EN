@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 - Introduction</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles/default.css">
+  <link rel="stylesheet" href="css/styles/androidstudio.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <main class="container my-4">
+    <h1>Data Analysis with Python</h1>
+    <h2>Module 2 - Data Wrangling</h2>
+
+    <section>
+      <h3>Syllabus</h3>
+      <ul>
+        <li>Identify and Handle Missing Values</li>
+        <li>Data Formatting</li>
+        <li>Data NormalizationSets</li>
+        <li>Binning</li>
+        <li>Indicator variables</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Pre-processing Data in Python</h3>
+
+      <p>Data pre-processing is the process of converting or mapping data from one “raw” form into
+        another format to make it ready for further analysis. Data pre-processing is also often
+        called “data cleaning” or “data wrangling”, and there are likely other terms.</p>
+
+      <p>Here are the topics that we’ll be covering in this module:</p>
+      <ul>
+        <li>First, we’ll show you how to <u>identify and handle missing values</u>.
+          <p>A <strong>missing value</strong> condition occurs whenever a data entry is left empty.
+          </p>
+        </li>
+        <li>Then, we’ll cover <u>data formats</u>.
+          <p>Data from different sources may be in various formats, in different units or in various
+            conventions.</p>
+          <p>We will introduce some methods in Pandas that can standardize the values into the same
+            format, or unit, or convention.</p>
+        </li>
+        <li>After that, we’ll cover <u>data normalization</u>.
+          <p>Different columns of numerical data may have very different ranges, and direct
+            comparison
+            is often not meaningful.</p>
+          <p>Normalization is a way to bring all data into a similar range, for more useful
+            comparison.</p>
+          <p>Specifically, we’ll focus on the techniques of centering and scaling.</p>
+        </li>
+        <li>And then, we’ll introduce <u>data binning</u>.
+          <p>Binning creates bigger categories from a set of numerical values.</p>
+          <p>It is particularly useful for comparison between groups of data.</p>
+        </li>
+        <li>And lastly, we’ll talk about categorical variables and show you how to convert
+          categorical values into numeric variables to make statistical modeling easier.</li>
+      </ul>
+
+      <p>In Pandas, we usually perform operations along columns; each row of the column represents
+        a sample. You access a column by specifying the name of the column.</p>
+
+      <pre><code class="python">df["symbolling"]</code></pre>
+
+      <p>There are many ways to manipulate dataframes in Python.
+        For example, to add 1 to each “symbolling” entry, use this command.</p>
+
+      <pre><code class="python">df["symbolling"] = df["symbolling"] + 1</code></pre>
+    </section>
+
+    <section>
+      <h3>Dealing with missing values in Python</h3>
+
+      <p>When nodata value is stored for a feature for a particular observation, we say this
+        feature has a <strong>missing value</strong>.</p>
+
+      <p>Usually <strong>missing value</strong>: in dataset appears as “?”, “N/A”, 0 or just
+        a blank cell.</p>
+      <p>In the example here, the “normalized-losses” feature has a “missing value”, which is
+        represented with NaN.</p>
+
+      <figure>
+        <img src="images/img07.png" alt="Missing values">
+        <figcaption>Missing values</figcaption>
+      </figure>
+
+      <b><strong>But how can you deal with missing data?</strong></b>
+
+      <ul>
+        <li>Check if the person or the group that collected the data can go back
+          and find what the actual value should be.</li>
+        <li>Remove the data where that missing value is found. We can either drop the whole variable
+          or just the single data entry with the missing value.</li>
+        <li>Replace the data by the average, the median, the frequent value, etc.
+          But, this method is less accurate since we need to replace missing data
+          with a guess of what the data should be.</li>
+        <li>Leave the missing values as missing data.</li>
+      </ul>
+
+      <p>We can replace the "?" in the dataset with "NaN" values.</p>
+      <pre><code class="python">import numpy as np
+
+# replace "?" to NaN
+df.replace("?", np.nan, inplace = True)
+df.head(5)</code></pre>
+
+      <figure>
+        <img src="images/img08.png" alt="Missing values">
+        <figcaption>Missing values</figcaption>
+      </figure>
+
+      <p>To count missing values in each column of the dataset.</p>
+
+      <pre><code class="python"># Create a mask for the missing data where the missing data is marked True
+# non missing data in marked False
+missing_data = df.isnull()
+
+for column in df.columns:
+    # count missing values for each column
+    nan_count = missing_data[missing_data[column] == True][column].count()
+    if nan_count > 0:
+        print (f"{column}: {nan_count} missing data")
+        print()</code></pre>
+
+      <p>Whole columns should be dropped only if most entries in the column are empty. In our
+        dataset,
+        none of the columns are empty enough to drop entirely. We have some freedom in choosing
+        which
+        method to replace data; however, some methods may seem more reasonable than others. We will
+        apply each method to many different columns:</p>
+
+      <ul>
+        <li>
+          <strong>Replace by mean:</strong>
+          <ul>
+            <li>"normalized-losses": 41 missing data, replace them with mean</li>
+            <li>"stroke": 4 missing data, replace them with mean</li>
+            <li>"bore": 4 missing data, replace them with mean</li>
+            <li>"horsepower": 2 missing data, replace them with mean</li>
+            <li>"peak-rpm": 2 missing data, replace them with mean</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Replace by frequency:</strong>
+          <ul>
+            <li>"num-of-doors": 2 missing data, replace them with "four".<br>
+              <strong>Reason:</strong> 84% sedans is four doors. Since four doors is most frequent,
+              it is most likely to
+              occur
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Drop the whole row:</strong>
+          <ul>
+            <li>"price": 4 missing data, simply delete the whole row<br>
+              <strong>Reason:</strong> price is what we want to predict. Any data entry without
+              price data cannot be used for
+              prediction; therefore any row now without price data is not useful to us
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>Replace the following columns missing data by the mean value.</p>
+
+      <pre><code class="python">columns = ["normalized-losses", "stroke", "bore", "horsepower", "peak-rpm"]
+for column in columns:
+    avg = df[column].astype("float").mean()
+    df[column].replace(np.nan, avg, inplace=True)
+df[columns].dtypes</code></pre>
+
+      <p>Replace the "num-of-doors" missing values by the most frequent value.</p>
+
+      <pre><code class="python"># count the differents values in the column
+df['num-of-doors'].value_counts()</code></pre>
+
+      <figure>
+        <img src="images/img09.png" alt="Value counts results">
+        <figcaption>Value counts results</figcaption>
+      </figure>
+
+      <p>We can see that four doors are the most common type. We can also use the ".idxmax()" method
+        to calculate for us the most common type automatically:</p>
+
+      <pre><code class="python">most_freq = df['num-of-doors'].value_counts().idxmax()
+df["num-of-doors"].replace(np.nan, most_freq inplace=True)</code></pre>
+
+      <p>Finally, let's drop all rows that do not have price data:</p>
+      <pre><code class="python"># simply drop whole row with NaN in "price" column
+df.dropna(subset=["price"], axis=0, inplace=True)
+
+# reset index, because we droped two rows
+df.reset_index(drop=True, inplace=True)</code></pre>
+    </section>
+
+    <section>
+      <h3>Data Formatting in Python</h3>
+
+      <p>Data formatting means bringing data into a common standard of expression that allows
+        users to make meaningful comparisons.</p>
+      <p>As a part of dataset cleaning, data formatting ensures that data is consistent and easily
+        understandable.</p>
+
+      <p>Referring to our used car dataset, there’s a feature named “city-mpg” in the dataset,
+        which refers to a car fuel consumption in miles per gallon unit.
+        However, you may be someone who lives in a country that uses metric units.
+        So you would want to convert those values to L/100km --the metric version.</p>
+
+      <p>For a number of reasons, including when you import a dataset into Python, the data type
+        may be incorrectly established. It is important for later analysis to explore the feature’s
+        data type and convert them
+        to the correct data types.</p>
+
+      <p>There are many data types in pandas:</p>
+      <ul>
+        <li>Objects can be letters or words.</li>
+        <li>Int64 are integers.</li>
+        <li>Floats are real numbers.</li>
+        <li>There are many others.</li>
+      </ul>
+
+      <p>To identify a features data type, in Pandas we can use the <code>dataframe.dtypes</code>
+        method and check the datatype of each variable in a dataframe.</p>
+
+      <pre><code class="python">df.dtypes</code></pre>
+
+      <figure>
+        <img src="images/img10.png" alt="dtypes outputs">
+        <figcaption>dtypes outputs</figcaption>
+      </figure>
+
+      <p>In the case of wrong datatypes, the method dataframe.astype() can be used to convert
+        a datatype from one format to another.</p>
+      <p>For example, using astype(“int”) for the price column, you can convert the object column
+        into an integer type variable.</p>
+
+      <pre><code class="python">columns = {
+    "normalized-losses": int, 
+    "stroke": float, 
+    "bore": float, 
+    "horsepower": float, 
+    "peak-rpm": float
+}
+for colname, coltype in columns.items():
+    df[colname] = df[colname].astype(coltype)
+df.dtypes</code></pre>
+
+      <figure>
+        <img src="images/img11.png" alt="The columns new types">
+        <figcaption>The columns new types</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h3>Data Standardization</h3>
+
+      <p>Data is usually collected from different agencies with different formats.
+        (Data Standardization is also a term for a particular type of data normalization, where we
+        subtract the mean and divide by the standard deviation)
+      </p>
+
+      <p<b>What is Standardization?</b>></p>
+        <p>Standardization is the process of transforming data into a common format which allows the
+          researcher to make the meaningful comparison.
+        </p>
+
+        <b>Example</b>
+        <p>Transform mpg to L/100km:</p>
+        <p>In our dataset, the fuel consumption columns "city-mpg" and "highway-mpg" are represented
+          by mpg (miles per gallon) unit. Assume we are developing an application in a country that
+          accept the fuel consumption with L/100km standard</p>
+        <p>We will need to apply <b>data transformation</b> to transform mpg into L/100km?</p>
+
+        <pre><code class="python">cols = {
+    "city-mpg": 'city-L/100km', 
+    "highway-mpg": 'highway-L/100km'
+}
+for oldcol, newcol in cols.items():
+    # Transform the mpg -> l/100km
+    df[oldcol] = 235 / df[oldcol]
+    # rename the column
+    df.rename(columns={oldcol: newcol}, inplace=True)
+df[cols.values()]</code></pre>
+
+        <figure>
+          <img src="images/img12.png" alt="Transformed MPG to L/100km">
+          <figcaption>Transformed MPG to L/100km</figcaption>
+        </figure>
+    </section>
+
+    <section>
+      <h3>Data normalization</h3>
+
+      <p>Consider a dataset containing two features: “age” and “income”, where “age”
+        ranges from 0 to 100, while “income” ranges from 0 to 20,000 and higher.</p>
+      <p>“income” is about 1,000 times larger than “age”, and ranges from 20,000 to 500,000.</p>
+      <p>When we do a linear regression, for example, the attribute “income” will
+        intrinsically influence the result more, due to its larger value, but this doesn’t
+        necessaril mean it is more ‘important’ as a predictor.</p>
+      <p>To avoid this, we can normalize these two variables into values that range from 0 to 1.</p>
+
+      <p>In our dataset, we notice in the data that the feature “length” ranges from 150 to 250,
+        while feature “width” and “height” ranges from 50 to 100.
+      </p>
+
+      <p>We may want to normalize these variables so that the range of the values is consistent.</p>
+
+      <p>There are several ways to normalize data:</p>
+      <ul>
+        <li>Simple feature scaling, just divides each value by the
+          maximum value for that feature.</li>
+        <li>Min-Max scaling, takes each value, X_old, subtracted from the minimum
+          value of that feature, then divides by the range of that feature.</li>
+        <li>“z-score” or “standard score”, in this formula, for each value,
+          you subtract the Mu which is the average of the feature,
+          and then divide by the standard deviation (sigma).
+          The resulting values hover around 0, and typically range between
+          -3 and +3, but can be higher or lower.</li>
+      </ul>
+
+      <figure>
+        <img src="images/img13.png" alt="Formulaes to normalize data">
+        <figcaption>Formulaes to normalize data: Simple scaling, Min-Max scaling, and z-score
+          scaling.</figcaption>
+      </figure>
+
+      <p>Let's normalize the "height", "width" and "length" columns in our dataset using the simple
+        features scaling method.</p>
+
+      <pre><code class="python"># replace (original value) by (original value)/(maximum value)
+cols = ['length', 'width', 'height']
+for col in cols:
+    df[col] = df[col] / df[col].max()
+df[cols].head()</code></pre>
+
+      <p>The results are as follow.</p>
+
+      <figure>
+        <img src="images/img16.png" alt="The result of data normalization">
+        <figcaption>The result of data normalization</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h3>Binning</h3>
+      <b>Why binning?</b>
+      <p>Binning is a process of transforming continuous numerical variables into discrete
+        categorical 'bins', for grouped analysis.</p>
+
+      <b>Example: </b>
+      <p>In our dataset, "horsepower" is a real valued variable ranging from 48 to 288, it has 57
+        unique values. What if we only care about the price difference between cars with high
+        horsepower, medium horsepower, and little horsepower (3 types)? Can we rearrange them into
+        three ‘bins' to simplify analysis? </p>
+
+      <p>We will use the Pandas method 'cut' to segment the 'horsepower' column into 3 bins.</p>
+
+      <pre><code class="python"># we are building 3 bins of equal length, there should be 4 dividers
+bins = np.linspace(min(df["horsepower"]), max(df["horsepower"]), 4)
+# apply the cut Pandas method to create a new column with the three bins
+# attach labels to each new created bin
+group_names = ['Low', 'Medium', 'High']
+df['horsepower-binned'] = pd.cut(df['horsepower'], bins, labels=group_names, include_lowest=True )
+df[['horsepower','horsepower-binned']].head(10)</code></pre>
+
+      <figure>
+        <img src="images/img17.png" alt="The result of binning">
+        <figcaption>The result of binning, each range is replaced with the corresponding label: Low,
+          Medium or High.</figcaption>
+      </figure>
+
+      <p>Lets see the number of vehicles in each bin.</p>
+
+      <pre><code class="python">df["horsepower-binned"].value_counts()</code></pre>
+
+      <figure>
+        <img src="images/img18.png" alt="The value count of each label">
+        <figcaption>The value count of each label.</figcaption>
+      </figure>
+
+      <p>Lets plot the distribution of each bin.</p>
+
+      <pre><code class="python">%matplotlib inline
+import matplotlib as plt
+from matplotlib import pyplot
+pyplot.bar(group_names, df["horsepower-binned"].value_counts())
+
+# set x/y labels and plot title
+plt.pyplot.xlabel("horsepower")
+plt.pyplot.ylabel("count")
+plt.pyplot.title("horsepower bins")</code></pre>
+      <figure>
+        <img src="images/img19.png" alt="The bar plot of the binned values">
+        <figcaption>The bar plot of the binned values.</figcaption>
+      </figure>
+
+      <p>Normally, a histogram is used to visualize the distribution of bins we created above.</p>
+
+      <pre><code class="python">%matplotlib inline
+import matplotlib as plt
+from matplotlib import pyplot
+
+# draw historgram of attribute "horsepower" with bins = 3
+plt.pyplot.hist(df["horsepower"], bins = 3)
+
+# set x/y labels and plot title
+plt.pyplot.xlabel("horsepower")
+plt.pyplot.ylabel("count")
+plt.pyplot.title("horsepower bins")</code></pre>
+
+      <figure>
+        <img src="images/img20.png" alt="The histogram plot of the horsepower column">
+        <figcaption>The histogram plot of the horsepower column is similar to the above bar chart
+        </figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h3>Turning categorical variables into quantitative variables</h3>
+
+
+      <b>What is an indicator variable?</b>
+      <p>
+        An indicator variable (or dummy variable) is a numerical variable used to label categories.
+        They are called 'dummies' because the numbers themselves don't have inherent meaning.
+      </p>
+
+      <b>Why we use indicator variables?</b>
+      <p>So we can use categorical variables for regression analysis in the later modules.</p>
+
+      <b>Example</b>
+      <p>We see the column "fuel-type" has two unique values, "gas" or "diesel". Regression doesn't
+        understand words, only numbers. To use this attribute in regression analysis, we convert
+        "fuel-type" into indicator variables.</p>
+
+      <p>We will use the panda's method 'get_dummies' to assign numerical values to different
+        categories of fuel type.</p>
+
+      <pre><code class="python">dummy_variable_1 = pd.get_dummies(df["fuel-type"])
+dummy_variable_1.head()</code></pre>
+
+      <figure>
+        <img src="images/img21.png" alt="The indicator variables">
+        <figcaption>The indicator variables</figcaption>
+      </figure>
+
+      <pre><code class="python"># merge data frame "df" and "dummy_variable_1" 
+df = pd.concat([df, dummy_variable_1], axis=1)
+
+# drop original column "fuel-type" from "df"
+df.drop("fuel-type", axis = 1, inplace=True)</code></pre>
+    </section>
+  </main>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/highlight.pack.js"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+
+</html>

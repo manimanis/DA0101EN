@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 - Exploratory Data Analysis</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles/default.css">
+  <link rel="stylesheet" href="css/styles/androidstudio.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <main class="container my-4">
+    <h1>Data Analysis with Python</h1>
+    <h2>Module 3 - Exploratory Data Analysis</h2>
+
+    <section>
+      <h3>Syllabus</h3>
+      <ul>
+        <li>Descriptive Statistics</li>
+        <li>Basic of Grouping</li>
+        <li>ANOVA</li>
+        <li>Correlations</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Exploratory Data Analysis</h3>
+
+      <p>In this module we’re going to cover the basics of Exploratory Data Analysis using Python.
+      </p>
+
+      <p>Exploratory Data Analysis, or in short “EDA”, is an approach to analyze data in order to:
+      </p>
+
+      <ul>
+        <li>summarize main characteristics of the data</li>
+        <li>gain better understanding of the dataset,</li>
+        <li>uncover relationships between different variables, and</li>
+        <li>extract important variables for the problem we are trying to solve.</li>
+      </ul>
+
+      <p>The main question we are trying to answer in this module is:</p>
+
+      <p><strong>“What are the characteristics that have the most impact on the car price?”</strong>
+      </p>
+
+      <p>In this module you will learn about:</p>
+
+      <ul>
+        <li>Descriptive Statistics, which describe basic features of a dataset and obtains a short
+          summary about the sample and measures of the data.</li>
+        <li>Basic of Grouping Data using group by, and how this can help to transform our dataset.
+        </li>
+        <li>ANOVA, the analysis of variance, a statistical method in which the variation in a set of
+          observations is divided into distinct components.</li>
+        <li>The Correlation between different variables, where we’ll introduce you to various
+          correlation statistical methods, namely Pearson Correlation and Correlation Heatmaps.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Descriptive Statistics</h3>
+
+
+      <p>The easiest way to calculate some descriptive statistics for your data, and obtain a short
+        summary about the sample and measures is by using the describe() function in pandas.</p>
+
+      <pre><code class="python">df.describe()</code></pre>
+
+      <figure>
+        <img src="images/img22.png" alt="df.describe() output">
+        <figcaption>df.describe() output</figcaption>
+      </figure>
+
+      <p>The "describe" function automatically computes basic statistics for all numerical
+        variables.
+        It shows the mean, the total number of data points, the standard deviation, the quartiles
+        and
+        the extreme values. Any NaN values are automatically skipped in these statistics.</p>
+
+      <p>This function will give you a clearer idea of the distribution of your different variables.
+      </p>
+
+      <p>You could have also categorical variables in your dataset. For example, in our dataset we
+        have
+        the drive system as a categorical variable, which consists of the categories: forward-wheel
+        drive, rear-wheel drive, and four-wheel drive.</p>
+
+      <p>One way you can summarize the categorical data is by using the function value_counts().</p>
+
+      <pre><code class="python">dw_count = df['drive-wheels'].value_counts()
+dw_count.head()</code></pre>
+
+      <figure>
+        <img src="images/img23.png" alt=".value_counts() output">
+        <figcaption>.value_counts() output</figcaption>
+      </figure>
+
+      <p>Boxplots are a great way to visualize numeric data, since you can visualize the various
+        distributions of the data.</p>
+
+      <figure>
+        <img src="images/img24.png" alt="Box plot parts">
+        <figcaption>Box plot parts</figcaption>
+      </figure>
+
+      <p>With boxplots, you can easily spot outliers and also see the distribution and skewness of
+        the data.</p>
+
+      <p>Boxplots make it easy to compare between groups. In this example, using Boxplot we can see
+        the distribution of different categories of the “drive-wheels” feature over price
+        feature. We can see that the distribution of price
+        between the rwd (rear wheel drive) and the other categories are distinct, but the price
+        for fwd (front wheel drive) and 4wd (four wheel drive) are almost indistinguishable.</p>
+
+      <pre><code class="python">sns.boxplot(x="drive-wheels", y="price", data=df)</code></pre>
+
+      <figure>
+        <img src="images/img25.png" alt="Box plot of the drive-wheels column">
+        <figcaption>Box plot of the "drive-wheels" column</figcaption>
+      </figure>
+
+      <p>What if we want to understand the relationship between “engine size” and ”price”? </p>
+      <p>Could engine size possibly predict the price of a car? </p>
+
+      <p>One good way to visualize this is using a scatter plot. This plot shows the relationship
+        between two variables:</p>
+
+      <ul>
+        <li>The predictor variable: is the variable that you are using to predict an outcome. In
+          this
+          case, our predictor variable is the "engine-size".</li>
+        <li>The target variable: is the variable that you are trying to predict. In this case, our
+          target variable is the "price".</li>
+      </ul>
+
+      <p>In a scatterplot, we typically set the predictor variable on the x-axis
+        and we set the target variable on the y-axis.</p>
+
+      <p>In this case, we will plot the "engine-size" and the "price" using the Matplotlib function
+        “scatter”.</p>
+
+      <pre><code class="python">sns.scatterplot(x="engine-size", y="price", data=df)
+plt.xlabel("Engine size")
+plt.ylabel("Size")
+plt.ylim(0)</code></pre>
+
+      <figure>
+        <img src="images/img26.png" alt="Scatter plot">
+        <figcaption>Scatter plot</figcaption>
+      </figure>
+
+      <p>Something to note from the scatterplot is that as the engine size goes up, the price of the
+        car also goes up.</p>
+      <p>This is giving us an initial indication that there is a positive linear relationship
+        between these two variables.</p>
+    </section>
+
+    <section>
+      <h3>GroupBy Basics</h3>
+
+      <p>Assume you want to know:</p>
+      <ul>
+        <li>Is there any relationship between the different types of “drive system”
+          (forward, rear and four-wheel drive) and the “price” of the vehicles?</li>
+        <li>If so, which type of “drive system” adds the most value to a vehicle?</li>
+      </ul>
+      <p>It would be nice if we could group all the data by the different types of drive wheels,
+        and compare the results of these different drive wheels against each other.</p>
+
+      <p>In pandas this can be done using the group by method. The group by method is used on
+        categorical variables, groups the data into subsets according
+        to the different categories of that variable.
+        You can group by a single variable or you can group by multiple variables by passing
+        in multiple variable names.</p>
+
+      <pre><code class="python">df_group_one = df[['drive-wheels','body-style','price']]
+# grouping results
+df_group_one = df_group_one.groupby(['drive-wheels'],as_index=False).mean()
+df_group_one</code></pre>
+
+
+      <figure>
+        <img src="images/img27.png" alt="Grouping by a single column">
+        <figcaption>Grouping by a single column</figcaption>
+      </figure>
+
+      <pre><code class="python"># grouping results
+df_gptest = df[['drive-wheels','body-style','price']]
+grouped_test1 = df_gptest.groupby(['drive-wheels','body-style'],as_index=False).mean()
+grouped_test1</code></pre>
+
+
+      <figure>
+        <img src="images/img28.png" alt="Grouping by multiple columns">
+        <figcaption>Grouping by multiple columns</figcaption>
+      </figure>
+
+      <p>We can see that, according to our data, rear wheel drive convertibles and rear wheel drive
+        hardtops have the highest value, while four wheel drive hatchbacks have the lowest value.
+      </p>
+
+      <p>A table of this form isn’t the easiest to read, and also not very easy to visualize.
+        To make it easier to understand, we can transform this table to a pivot table by using the
+        pivot method.</p>
+
+      <p>We will pivot the "drive-wheel" to become the rows of the table, and the "body-style" to
+        become the columns of the table</p>
+
+      <pre><code class="python">grouped_pivot = grouped_test1.pivot(index='drive-wheels',columns='body-style')
+grouped_pivot</code></pre>
+
+      <figure>
+        <img src="images/img29.png" alt="Using pivot">
+        <figcaption>Using pivot</figcaption>
+      </figure>
+
+      <p>Another way to represent the pivot table is using a heatmap plot. It is a great way to plot
+        the target variable over multiple variables and through this get
+        visual clues of the relationship between these variables and the target.</p>
+
+      <pre><code class="python"># Use heat map to visualize the relationship 
+# between Body Style vs Price.
+plt.pcolor(grouped_pivot, cmap='RdBu')
+plt.colorbar()
+plt.show()</code></pre>
+
+      <figure>
+        <img src="images/img30.png" alt="Heat map to visualize grouped data">
+        <figcaption>Heat map to visualize grouped data</figcaption>
+      </figure>
+
+      <p>In the output plot, each type of “body style” is numbered along the x-axis, and each type
+        of “drive wheels” is numbered along the y-axis.
+        The average prices are plotted with varying colors based on their values, according to
+        the color bar.
+        We see that the top section of the heat map seems to have higher prices than the bottom
+        section.</p>
+    </section>
+
+    <section>
+      <h3>Analysis of Variance (ANOVA)</h3>
+
+      <p>Assume that we want to analyze a categorical variable and see the correlation among
+        different categories.</p>
+
+      <p>One question we may ask is: how different categories of the Make feature (as a categorical
+        variable) has impact on the price?</p>
+
+      <pre><code class="python"># we will study make vs price
+df_mp = df[['make', 'price']]
+df_mp = df_mp.groupby(['make'], as_index=False).mean()
+df_mp.sort_values('price', inplace=True)
+df_mp</code></pre>
+
+      <pre><code class="python">from matplotlib import pyplot as plt
+import seaborn as sns</code></pre>
+
+      <pre><code class="python">plt.figure(figsize=(20/2.54, 15/2.54))
+plt.xticks(rotation=90)
+sns.barplot(x='make', y='price', data=df_mp)</code></pre>
+
+      <figure>
+        <img src="images/img31.png" alt="Bar chart of the price vs makes">
+        <figcaption>Bar chart of the average price vs makes</figcaption>
+      </figure>
+
+      <p>We do see a trend of increasing prices as we move right along the graph.</p>
+
+      <p><strong>But which category in the make feature has the most and which one has the least
+          impact on the car price prediction?</strong></p>
+
+      <p>To analyze categorical variables such as the "make" variable, we can use a method such
+        as the ANOVA method. ANOVA is a statistical test that stands for "Analysis of Variance".</p>
+
+      <p>ANOVA can be used to find the correlation between different groups of a categorical
+        variable.</p>
+
+      <p>The ANOVA test returns two values:</p>
+      <ul>
+        <li><strong>F-test score</strong>: The F-test calculates the ratio of variation between the
+          groups's mean over the variation within each of the sample groups.</li>
+        <li><strong>p-value</strong>: The p-value shows whether the obtained result is statistically
+          significant.</li>
+      </ul>
+
+      <p>The bar chart shows the average price for different categories of the make feature.</p>
+
+      <p>From the bar chart, we expect a small F-score between "Hondas" and "Subarus" because there
+        is a small difference between the average prices.</p>
+
+      <p>On the other hand, we can expect a large F-value between Hondas and Jaguars because the
+        differencee between the prices are very significant.</p>
+
+      <p>Let's perform an ANOVA test to see if our intuition is correct.</p>
+
+      <p>The ANOVA test can be performed in Python using the f_oneway method as the built-in
+        function of the Scipy package.</p>
+
+      <pre><code class="python">from scipy import stats
+
+df_mp = df[['make', 'price']]
+df_mp = df_mp.groupby(['make'])
+
+target_make = 'honda'
+for make in ['subaru', 'jaguar']:
+    print(f"{target_make} vs {make}")
+    res = stats.f_oneway(df_mp.get_group(target_make)["price"], 
+                         df_mp.get_group(make)["price"])
+    print(f"F-Value is {res.statistic}")
+    print(f"P-Value is {res.pvalue}")
+    print()</code></pre>
+
+      <figure>
+        <img src="images/img32.png" alt="Calculate ANOVA">
+        <figcaption>ANOVA</figcaption>
+      </figure>
+
+      <p>The results confirm what we guessed at first.</p>
+
+      <ul>
+        <li>The prices between Hondas and Subarus are not significantly different, as the F-test
+          score is less than 1 and p-value is larger than 0.05.</li>
+        <li>The prices between Hondas and Jaguars are significantly different, since the F-score
+          is very large (F = 401) and the p-value is lesser than 0.05.</li>
+      </ul>
+
+      <p>We can say that there is a strong correlation between a categorical variable
+        and other variables, if the ANOVA test gives us a large F-test value and a small p-value.
+      </p>
+
+      <h4>The F Value in ANOVA</h4>
+
+      <p>The F value in one way ANOVA is a tool to help you answer the question “Is the variance
+        between the means of two populations significantly different?”. The F value in the ANOVA
+        test also determines the P value; The P value is the probability of getting a result at
+        least as extreme as the one that was actually observed, given that the null hypothesis is
+        true.</p>
+
+      <p>The p value is a probability, while the f ratio is a test statistic.</p>
+
+      <h4>One Way ANOVA</h4>
+
+      <p>A one way ANOVA is used to compare two means from two independent (unrelated) groups using
+        the F-distribution. The null hypothesis for the test is that the two means are equal.
+        Therefore, a significant result means that the two means are unequal.</p>
+
+      <h4>What is a null hypothesis?</h4>
+
+      <p>All statistical tests have a null hypothesis. For most tests, the null hypothesis is that
+        there is no relationship between your variables of interest or that there is no difference
+        among groups.</p>
+      <p>For example, in a two-tailed t-test, the null hypothesis is that the difference between two
+        groups is zero.</p>
+
+      <h4>F Value in Regression</h4>
+
+      <p><b>The F value in regression is the result of a test where the null hypothesis is that all
+          of the regression coefficients are equal to zero.</b> In other words, the model has no
+        predictive capability.</p>
+      <p>Basically, the f-test compares your model with zero predictor variables (the
+        intercept only model), and decides whether your added coefficients improved the model. If
+        you get a significant result, then whatever coefficients you included in your model improved
+        the model’s fit.</p>
+
+      <p><b>Read your p-value first.</b> If the p-value is small (less than your alpha level), you
+        can reject the null hypothesis. <b>Only then should you consider the f-value.</b> If you
+        don’t reject the null, ignore the f-value.</p>
+
+      <figure>
+        <img src="images/img33.png" alt="F-Value">
+        <figcaption>F-Value for poor correlation</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/img34.png" alt="F-Value">
+        <figcaption>F-Value for strong correlation</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h3>Correlation</h3>
+
+      <p>Correlation is a statistical metric for measuring to what extent
+        different variables are interdependent.
+        In other words, when we look at two variables over time,
+        if one variable changes how does this affect change in the other variable?
+      </p>
+
+      <p>For example, smoking is known to be correlated to lung cancer. Since you have a higher
+        chance of getting lung cancer if you smoke.</p>
+
+      <p><strong>It is important to know that correlation doesn't imply causation.</strong></p>
+
+      <p>In data science we usually deal more with correlation.</p>
+
+      <p>Let's look at the correlation between engine size and price.</p>
+
+      <p>We will use a scatter plot with a regression line, which indicates the relationship between
+        the two, to see whether the engine size has any impact on the price.</p>
+
+      <pre><code class="python">sns.regplot(x="engine-size", y="price", data=df)
+plt.ylim(0)</code></pre>
+
+      <figure>
+        <img src="images/img35.png" alt="Regression plot for engine-size vs price">
+        <figcaption>Regression plot for engine-size vs price</figcaption>
+      </figure>
+
+      <p>We can see that there's a positive linear relationship between the two variables.
+        So there is a positive correlation between engine size and price.</p>
+
+      <p>Now let's look at the relationship between
+        highway miles per gallon to see its impact on the car price.</p>
+
+      <pre><code class="python">sns.regplot(x="highway-mpg", y="price", data=df)
+plt.ylim(0)</code></pre>
+
+      <figure>
+        <img src="images/img36.png" alt="Regression plot for highway-mpg vs price">
+        <figcaption>Regression plot for highway-mpg vs price</figcaption>
+      </figure>
+
+      <p>There is a negative linear relationship between highway miles per gallon and price.
+        Although this relationship is negative the slope of the line is steep
+        which means that the highway miles per gallon is still a good predictor of price.
+        These two variables are said to have a negative correlation.
+      </p>
+
+      <p>Finally, we want an example of a weak correlation.
+        For example, both low peak RPM and high values of peak RPM have low and high prices.
+        Therefore, we cannot use RPM to predict the values.</p>
+
+      <pre><code class="python">sns.regplot(x="peak-rpm", y="price", data=df)
+plt.ylim(0)</code></pre>
+
+      <figure>
+        <img src="images/img37.png" alt="Regression plot for peak-rpm vs price">
+        <figcaption>Regression plot for peak-rpm vs price</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h3>Correlation - Statistics</h3>
+
+      <p>Pearson correlation is one way to measure the strength of the correlation between
+        continuous numerical variables.</p>
+
+      <p>Pearson correlation method will give you two values:</p>
+
+      <ul>
+        <li>
+          <strong>The correlation coefficient</strong>
+          <ul>
+            <li>Close to 1: large positive correlation</li>
+            <li>Close to -1: large negative correlation</li>
+            <li>Close to 0: no correlation</li>
+          </ul>
+        </li>
+        <li>
+          <strong>The P-value</strong> tell us how certain we are about the correlation ?
+
+          <ul>
+            <li>P-value &lt; 0.001: strong certainty</li>
+            <li>0.001 &le; P-value &lt; 0.05: moderate certainty</li>
+            <li>0.05 &le; P-value &lt; 0.1: weak certainty</li>
+            <li>P-value &gt; 0.1: no certainty</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>We can say that there is a strong correlation when
+        the correlation coefficient is close to 1 or negative 1,
+        and the P-value is less than.001.</p>
+
+      <p>The following plot shows data with different correlation values.</p>
+
+      <figure>
+        <img src="images/img38.png" alt="Correlation values">
+        <figcaption>Correlation values</figcaption>
+      </figure>
+
+      <p>In this example, we want to look at the correlation between the variable's horsepower and
+        car price.</p>
+
+      <pre><code class="python">pearson_coef, pvalue = stats.pearsonr(df['horsepower'], df['price'])
+print(f"Pearson coefficient: {pearson_coef}")
+print(f"P-Value: {pvalue}")</code></pre>
+
+      <pre><code>Pearson coefficient: 0.809574567003656
+P-Value: 6.369057428259557e-48</code></pre>
+
+      <p>The correlation coefficient is approximately 0.8, and this is close to 1.
+        So there is a strong positive correlation.</p>
+      <p>And, the P-value is very small, much smaller than .001, so we can conclude that we are
+        certain about the strong positive correlation.</p>
+
+      <p>Taking all variables into account, we can now create a heatmap that indicates
+        the correlation between each of the variables with one another.</p>
+
+      <pre><code class="python">plt.figure(figsize=(7, 7))
+sns.heatmap(df.corr(), cmap="RdBu_r")</code></pre>
+
+      <figure>
+        <img src="images/img39.png" alt="Correlation heatmap">
+        <figcaption>Correlation heatmap</figcaption>
+      </figure>
+
+      <p>This correlation heatmap gives us a good overview
+        of how the different variables are related to one another and,
+        most importantly, how these variables are related to price.</p>
+    </section>
+  </main>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/highlight.pack.js"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+
+</html>
