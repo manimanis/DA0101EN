@@ -94,7 +94,219 @@
     <section>
       <h3>Linear and Multiple Linear Regression</h3>
 
-      
+      <p>Simple Linear Regression (or SLR) refers to one independent variable to make a prediction.
+      </p>
+      <p>Multiple Linear Regression (or MLR) refers to multiple independent variables to make a
+        prediction.
+      </p>
+
+      <figure>
+        <img src="images/img43.png"
+             alt="The difference between Linear Regression and Multiple Linear Regression">
+        <figcaption>The difference between Linear Regression and Multiple Linear Regression
+        </figcaption>
+      </figure>
+
+      <p>Simple Linear Regression is A method that is used to understand the relationship between
+        two variables:</p>
+      <ul>
+        <li>The predictor (independent) variable x,</li>
+        <li>and the target (dependent) variable y.</li>
+      </ul>
+
+      <p class="display-3 text-center">y = b<sub>0</sub> + b<sub>1</sub>.x</p>
+
+      <ul>
+        <li>The parameter b<sub>0</sub> is the intercept</li>
+        <li>The parameter b<sub>1</sub> is the slope</li>
+      </ul>
+
+      <p>When we fit or train the model, we will come up with these parameters.</p>
+
+      <p><strong>Let’s clarify the prediction step.</strong> It’s hard to figure out how much a car
+        costs, but if we assume that there is a linear relationship between the Highway Miles per
+        Gallon and the price of the car, we can use it to formulate
+        a model to determine the price of the car.</p>
+
+      <figure>
+        <img src="images/img44.png"
+             alt="Using the SLR to predict the price of the car in function of Highway MPG">
+        <figcaption>Using the SLR to predict the price of the car in function of Highway MPG
+        </figcaption>
+      </figure>
+
+      <p>If the Highway Miles per Gallon is 20, we can input his value into the model to obtain a
+        prediction of $22,000.</p>
+
+
+      <p>In many cases, many factors influence how much people pay for a car, for example, make or
+        how old the car is.
+        In this model, this uncertainty is taken into account by assuming a small random value is
+        added to the point
+        on the line; this is called noise.</p>
+
+      <figure>
+        <img src="images/img45.png" alt="The noise in the values of the cars">
+        <figcaption>The noise in the values of the cars</figcaption>
+      </figure>
+
+      <pre><code class="python">from sklearn.linear_model import LinearRegression
+# define the predictor variable X and the target variable y
+X = df[['highway-mpg']]
+y = df['price']
+# use linear regression
+lr = LinearRegression()
+lr.fit(X, y)</code></pre>
+
+      <p>When we fit the model it calculates :</p>
+
+      <ul>
+        <li>the intercept b0</li>
+        <li>the slope b1</li>
+      </ul>
+
+      <pre><code class="python">print("yhat = ", lr.intercept_, "+", lr.coef_[0], ".x")</code></pre>
+
+      <figure>
+        <img src="images/img46.png" alt="The intercept and the slope of the linear equation">
+        <figcaption>The intercept and the slope of the linear equation</figcaption>
+      </figure>
+
+      <pre><code class="python">x = pd.DataFrame(data={"highway-mpg": [20]})
+yhat = lr.predict(x)
+print(f"price({x.iloc[0][0]} highway-mpg) = {yhat[0]}$")</code></pre>
+
+      <figure>
+        <img src="images/img47.png" alt="Using the model to predict new prices">
+        <figcaption>Using the model to predict prices</figcaption>
+      </figure>
+
+
+      <p>Multiple Linear Regression is used to explain the relationship between
+        - One continuous target (Y) variable, and - Two or more predictor (X) variables.</p>
+
+      <p class="text-center display-5">y = b0 + b1.x1 + b2.x2 + b3.x3 + ... + bn.xn</p>
+
+      <p>If we have for example 4 predictor variables, then:</p>
+      <ul>
+        <li>B0: intercept</li>
+        <li>B1: the coefficient or parameter of X1</li>
+        <li>B2: the coefficient of parameter X2: and so on</li>
+      </ul>
+
+      <p>If there are only two variables then we can visualize the values in the space.</p>
+
+      <figure>
+        <img src="images/img48.png" alt="MLR Representation with two preditors variables">
+        <figcaption>MLR Representation with two preditors variables</figcaption>
+      </figure>
+
+      <pre><code class="python"># define the predictor variables
+X = df[['horsepower', 'curb-weight', 'engine-size', 'highway-mpg']]
+y = df['price']
+# Use linear regression
+mlr = LinearRegression()
+mlr.fit(X, y)</code></pre>
+
+      <p>We can find the different coefficients of the parameters.</p>
+
+      <pre><code class="python">print('b0 = ', mlr.intercept_)
+print('b1 = ', mlr.coef_[0])
+print('b2 = ', mlr.coef_[1])
+print('b3 = ', mlr.coef_[2])
+print('b4 = ', mlr.coef_[3])</code></pre>
+
+      <figure>
+        <img src="images/img49.png" alt="The coefficients and the intercept of the MLR">
+        <figcaption>The coefficients and the intercept of the MLR</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h3>Model Evaluation using Visualization</h3>
+
+      <p>Regression plots are a good estimate of:</p>
+      <ul>
+        <li>The relationship between two variables,</li>
+        <li>The strength of the correlation, and</li>
+        <li>The direction of the relationship (positive or negative).
+        </li>
+      </ul>
+
+      <p>There are several ways to plot a regression plot; a simple way is to use "regplot" from
+        the seaborn library.</p>
+
+      <pre><code class="python">sns.regplot(x="highway-mpg", y="price", data=df)
+plt.ylim(0)</code></pre>
+
+      <figure>
+        <img src="images/img50.png" alt="Regression plot">
+        <figcaption>Regression plot</figcaption>
+      </figure>
+
+      <p>The residual plot represents the error between the actual values and the predicted values.
+        We obtain this plot by subtracting the predicted value and the actual target value.</p>
+
+      <pre><code class="python">sns.residplot(x="highway-mpg", y="price", data=df)</code></pre>
+
+      <figure>
+        <img src="images/img51.png" alt="Residual plot">
+        <figcaption>Residual plot</figcaption>
+      </figure>
+
+      <p>We see in this case the Residuals have a curvature.</p>
+
+      <p>Looking at the plot gives us some insight into our data.
+        We expect to see the results to have zero mean.</p>
+      <p>This type of residual plot suggests a linear plot is appropriate.</p>
+
+      <figure>
+        <img src="images/img52.png" alt="Regression plot">
+        <img src="images/img53.png" alt="Residual plot">
+        <figcaption>Regression plot, Residual plot</figcaption>
+      </figure>
+
+      <p>In this residual plot there is curvature, the values of the error change with x.</p>
+
+      <figure>
+        <img src="images/img54.png" alt="Residual plot">
+        <img src="images/img55.png" alt="Residual plot">
+        <figcaption>Residual plot of non linear functions</figcaption>
+      </figure>
+
+      <p>This plot suggests a non-linear function.</p>
+
+      <p>A distribution plot counts the predicted value versus the actual value.
+        These plots are extremely useful for visualizing models with more than one independent
+        variable or feature.</p>
+
+        
+      Let's look at a simplified example: - We examine the vertical axis.
+      - We then count and plot the number of predicted points that are approximately equal to one.
+      - We then count and plot the number of predicted points that are approximately equal to two.
+      - We repeat the process for predicted points that are approximately equal to three.
+      Then we repeat the process for the target values.
+      In this case, all the target values are approximately equal to two.
+      The values of the targets and predicted values are continuous.
+      A histogram is for discrete values.
+      Therefore pandas will convert them to a distribution.
+      The vertical access is scaled to make the area under the distribution equal to one.
+      This is an example of using a distribution plot.
+      The dependent variable or feature is price.
+      The fitted values that result from the model are in blue.
+      The actual values are in red.
+      We see the predicted values for prices in the range from $40 000 to $50 000 are inaccurate.
+      The prices in the region form $10 000 to $20 000 are much closer to the target value.
+      In this example, we use multiple features or independent variables.
+      Comparing it to the plot on the last slide, we see predicted values are much closer to
+      the target values.
+      Here is the code to create a Distribution Plot.
+      The actual values are used as a parameter.
+      We want a distribution instead of a histogram so we want the hist parameter set to false.
+      The color is red.
+      The label is also included.
+      The predicted values are included for the second plot; the rest of the parameters are
+      set accordingly.
     </section>
   </main>
   <script src="js/bootstrap.bundle.min.js"></script>
