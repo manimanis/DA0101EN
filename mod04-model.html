@@ -280,33 +280,264 @@ plt.ylim(0)</code></pre>
         These plots are extremely useful for visualizing models with more than one independent
         variable or feature.</p>
 
-        
-      Let's look at a simplified example: - We examine the vertical axis.
-      - We then count and plot the number of predicted points that are approximately equal to one.
-      - We then count and plot the number of predicted points that are approximately equal to two.
-      - We repeat the process for predicted points that are approximately equal to three.
-      Then we repeat the process for the target values.
-      In this case, all the target values are approximately equal to two.
-      The values of the targets and predicted values are continuous.
-      A histogram is for discrete values.
-      Therefore pandas will convert them to a distribution.
-      The vertical access is scaled to make the area under the distribution equal to one.
-      This is an example of using a distribution plot.
-      The dependent variable or feature is price.
-      The fitted values that result from the model are in blue.
-      The actual values are in red.
-      We see the predicted values for prices in the range from $40 000 to $50 000 are inaccurate.
-      The prices in the region form $10 000 to $20 000 are much closer to the target value.
-      In this example, we use multiple features or independent variables.
-      Comparing it to the plot on the last slide, we see predicted values are much closer to
-      the target values.
-      Here is the code to create a Distribution Plot.
-      The actual values are used as a parameter.
-      We want a distribution instead of a histogram so we want the hist parameter set to false.
-      The color is red.
-      The label is also included.
-      The predicted values are included for the second plot; the rest of the parameters are
-      set accordingly.
+      <p>Let's look at a simplified example:</p>
+      <figure>
+        <img src="images/img56.png" alt="Line plot">
+        <figcaption>Line plot of the prices</figcaption>
+      </figure>
+
+      <ul>
+        <li>We examine the vertical axis for <strong>Price category 1</strong>.</li>
+        <li>We then count and plot the number of predicted points that are between [0, 5[.</li>
+        <li>We then count and plot the number of predicted points that are between [5, 10[</li>
+        <li>We then count and plot the number of predicted points that are between [10, 15[</li>
+      </ul>
+
+      <ul>
+        <li>We examine the vertical axis for <strong>Price category 2</strong>.</li>
+        <li>We then count and plot the number of predicted points that are between [5, 10[</li>
+      </ul>
+
+      <figure>
+        <img src="images/img57.png" alt="Distribution plot">
+        <figcaption>Distribution plot of the prices</figcaption>
+      </figure>
+
+      <p> The values of the targets and predicted values are continuous.
+        A histogram is for discrete values.
+        Therefore pandas will convert them to a distribution.
+        The vertical axis is scaled to make the area under the distribution equal to one.</p>
+
+      <p>This is an example of using a distribution plot.</p>
+      <pre><code class="python">Z = df[['horsepower', 'curb-weight', 'engine-size', 'highway-mpg']]
+Yhat = mlr.predict(Z)
+plt.figure(figsize=(width, height))
+
+ax1 = sns.distplot(df['price'], hist=False, color="r", label="Actual Value")
+sns.distplot(Yhat, hist=False, color="b", label="Fitted Values" , ax=ax1)
+
+plt.title('Actual vs Fitted Values for Price')
+plt.xlabel('Price (in dollars)')
+plt.ylabel('Proportion of Cars')
+
+plt.show()
+plt.close()</code></pre>
+
+      <ul>
+        <li>The dependent variable or feature is price.</li>
+        <li>The fitted values that result from the model are in blue.</li>
+        <li>The actual values are in red.</li>
+      </ul>
+
+      <figure>
+        <img src="images/img58.png" alt="Distribution plot">
+        <figcaption>Distribution plot of the prices</figcaption>
+      </figure>
+
+      <p>In this example, we use multiple features or independent variables. Predicted values are
+        much closer to the target values.</p>
+
+      <pre><code class="python">X = df[['highway-mpg']]
+Yhat = lr.predict(X)
+plt.figure(figsize=(width, height))
+
+ax1 = sns.distplot(df['price'], hist=False, color="r", label="Actual Value")
+sns.distplot(Yhat, hist=False, color="b", label="Fitted Values" , ax=ax1)
+
+plt.title('Actual vs Fitted Values for Price')
+plt.xlabel('Price (in dollars)')
+plt.ylabel('Proportion of Cars')
+
+plt.show()
+plt.close()</code></pre>
+
+      <figure>
+        <img src="images/img59.png" alt="Distribution plot">
+        <figcaption>Distribution plot of the prices</figcaption>
+      </figure>
+      <p>We see the predicted values for prices in the range from $40 000 to $50 000 are inaccurate.
+        The prices in the region form $10 000 to $20 000 are much closer to the target value.
+      </p>
+    </section>
+
+    <section>
+      <h3>Polynomial Regression and Pipelines</h3>
+
+      <p>Polynomial regression is a special case of the general linear regression.
+        This method is beneficial for describing curvilinear relationships.</p>
+
+      <p><strong>What is a curvilinear relationship?</strong>
+        It’s what you get by squaring or setting higher-order terms of the predictor variables
+        in the model, transforming the data.</p>
+
+      <p>The model can be quadratic, which means that the predictor variable in the model is
+        squared.</p>
+
+      <p class="display-4 text-center">&Yacute; = b<sub>0</sub> + b<sub>1</sub>.x + b<sub>2</sub>.x²
+      </p>
+
+      <figure>
+        <img src="images/img60.png" alt="Quadratic Model">
+        <figcaption>Quadratic Model</figcaption>
+      </figure>
+
+      <p>The model can be cubic, which means that the predictor variable is cubed.
+        This is a third order Polynomial regression.</p>
+
+      <p class="display-4 text-center">&Yacute; = b<sub>0</sub> + b<sub>1</sub>.x + b<sub>2</sub>.x²
+        + b<sub>3</sub>.x<sup>3</sup></p>
+
+      <figure>
+        <img src="images/img61.png" alt="Cubic Model">
+        <figcaption>Cubic Model</figcaption>
+      </figure>
+
+      <p>There also exists higher order polynomial regressions, when a good fit hasn’t been
+        achieved by second or third order.</p>
+
+      <p class="display-4 text-center">&Ycirc; = b<sub>0</sub> + b<sub>1</sub>.x + b<sub>2</sub>.x²
+        + b<sub>3</sub>.x<sup>3</sup> + ... + b<sub>n</sub>.x<sup>n</sup></p>
+
+      <p>We use the "preprocessing" library in sci-kit-learn, to create a polynomial feature object.
+      </p>
+
+      <pre><code class="python">from sklearn.preprocessing import PolynomialFeatures
+pr = PolynomialFeatures(degree=2)
+xpoly = pr.fit_transform(df[['horsepower', 'curb-weight']])
+xpoly</code></pre>
+
+      <figure>
+        <img src="images/img62.png" alt="Creating a polynomial feature object">
+        <figcaption>Creating a polynomial feature object</figcaption>
+      </figure>
+
+      <p>Let's do a more intuitive example.
+        Consider the features shown here.</p>
+
+      <pre><code class="python">sdf = pd.DataFrame(data={'X1': [1,2], 'X2': [2,3]}) 
+pr = PolynomialFeatures(degree=2)
+xp = pr.fit_transform(sdf)
+xp</code></pre>
+
+      <figure>
+        <img src="images/img63.png" alt="Creating a polynomial feature object">
+        <figcaption>Creating a polynomial feature object</figcaption>
+      </figure>
+
+      <p>X1: 1, X2: 2, X1.X2: 2, X1²: 1, X2²: 4</p>
+
+      <p> As the dimension of the data gets larger we may want to normalize multiple features in
+        scikit-learn, instead, we can use the preprocessing module to simplify many tasks.</p>
+
+      <p>For example, we can Standardize each feature simultaneously.
+        We import “StandardScaler” We train the object, fit the scale object;
+        then transform the data into a new dataframe on array “x_scale”.
+        There are more normalization methods available in the preprocessing library, as well as
+        other
+        transformations.</p>
+
+      <pre><code class="python">from sklearn.preprocessing import StandardScaler
+scale = StandardScaler()
+scale.fit(df[['horsepower', 'highway-mpg']])
+x_scale = scale.transform(df[['horsepower', 'highway-mpg']])
+x_scale</code></pre>
+
+      <figure>
+        <img src="images/img64.png" alt="Standard Scaler">
+        <figcaption>Standard Scaler</figcaption>
+      </figure>
+
+      <h4>Pipelines</h4>
+      <p>There are many steps to getting a prediction, for example,</p>
+      <ul>
+        <li>Normalization,</li>
+        <li>Polynomial transform,</li>
+        <li>and Linear regression.</li>
+      </ul>
+      <p>We can simplify our code by using a pipeline library.</p>
+
+      <p>Pipelines sequentially perform a series of transformation.
+        The last step carries out a prediction.</p>
+
+      <figure>
+        <img src="images/img65.png" alt="Using a pipeline">
+        <figcaption>Using a pipeline</figcaption>
+      </figure>
+
+      <pre><code class="python">from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+input_ = [
+    ("scale", StandardScaler()),
+    ("Polynomial", PolynomialFeatures()),
+    ("model", LinearRegression())
+]
+
+pipe = Pipeline(input_)
+
+X = df[['horsepower', 'curb-weight', 'engine-size', 'highway-mpg']]
+y = df['price']
+
+pipe.fit(X, y)
+
+yhat = pipe.predict(X)</code></pre>
+
+      <pre><code class="python">plt.plot(y)
+plt.plot(yhat)</code></pre>
+
+      <figure>
+        <img src="images/img66.png" alt="Using a pipeline">
+        <figcaption>Using a pipeline</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h3>In sample evaluation</h3>
+
+      <p>Now that we’ve seen how we can evaluate a model by using visualization, we want to
+        numerically evaluate our models.</p>
+
+      <p>Two important measures that we often use to determine the fit of a model are:</p>
+      <ul>
+        <li>Mean Square Error (MSE): we find the difference between the actual value y and the
+          predicted value yhat then square it.</li>
+        <li>and R-squared: R-squared is also called the coefficient of determination. It’s a measure
+          to determine how close the data is to the fitted regression line. So how close is our
+          actual data to
+          our estimated model?</li>
+      </ul>
+
+      <figure>
+        <img src="images/img67.png" alt="MSE formula">
+        <img src="images/img68.png" alt="R² formula">
+        <figcaption>MSE formula, R² formula</figcaption>
+      </figure>
+
+      <p>To find the MSE in Python, we can import the “mean_Squared_error()” from
+        “scikit-learn.metrics”.
+        The “mean_Squared_error()” function gets two inputs: the actual value of target variable
+        and the predicted value of target variable.</p>
+
+      <pre><code>from sklearn.metrics import mean_squared_error
+mean_squared_error(y, yhat)</code></pre>
+
+      <pre><code>9656613.4039896</code></pre>
+
+      <p>We find the R-squared value in Python by using the score() method, in the linear regression
+        object.</p>
+
+      <pre><code class="python">lr = LinearRegression()
+X = df[['highway-mpg']]
+y = df['price']
+lr.fit(X, y)
+lr.score(X, y)</code></pre>
+
+      <pre><code>0.4965911884339176</code></pre>
+
+      <p>From the value that we get from this example, we can say that approximately 49.695% of the
+        variation of price is explained by this simple linear model.</p>
     </section>
   </main>
   <script src="js/bootstrap.bundle.min.js"></script>
